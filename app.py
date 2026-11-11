@@ -12,3 +12,4 @@ def health():
     return {"status": "ok", "version": APP_VERSION}
 
 print(health())
+print("Startup complete")
