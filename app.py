@@ -9,6 +9,6 @@ print(f"App version: {APP_VERSION}")
 print("Ready")
 
 def health():
-    return {"status": "OK", "version": APP_VERSION}
+    return {"status": "ok", "version": APP_VERSION}
 
 print(health())
