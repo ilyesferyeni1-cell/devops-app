@@ -11,3 +11,6 @@ Current version: 1.0.0
 health() returns the app status and version.
 Run: python3 app.py
 Quick Friday fix
+
+## Setup (after cloning)
+pre-commit install    # activate the commit guards (once per clone)
