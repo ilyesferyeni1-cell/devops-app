@@ -1,0 +1,20 @@
+# Guards that run before every commit.
+# Each "repo" is a collection of ready-made hooks downloaded from GitHub.
+repos:
+  # General file hygiene
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: trailing-whitespace      # removes spaces at the end of lines
+      - id: end-of-file-fixer        # makes sure files end with one newline
+      - id: check-yaml               # refuses broken YAML files
+      - id: check-merge-conflict     # refuses leftover <<<<<<< markers
+      - id: check-added-large-files  # refuses huge files (default > 500 KB)
+
+  # Python linter and formatter
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.8.0
+    hooks:
+      - id: ruff                     # finds bugs and bad practices
+        args: [--fix]                # fixes the easy ones automatically
+      - id: ruff-format              # formats code in one consistent styles
