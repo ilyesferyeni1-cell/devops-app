@@ -10,3 +10,4 @@ Current version: 1.0.0
 ## Health check
 health() returns the app status and version.
 Run: python3 app.py
+Quick Friday fix
