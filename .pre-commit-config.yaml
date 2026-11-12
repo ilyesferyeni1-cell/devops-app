@@ -11,10 +11,16 @@ repos:
       - id: check-merge-conflict     # refuses leftover <<<<<<< markers
       - id: check-added-large-files  # refuses huge files (default > 500 KB)
 
+  # Secret scanner
+  - repo: https://github.com/gitleaks/gitleaks
+    rev: v8.21.2
+    hooks:
+      - id: gitleaks                 # refuses commits containing secrets
+
   # Python linter and formatter
   - repo: https://github.com/astral-sh/ruff-pre-commit
     rev: v0.8.0
     hooks:
       - id: ruff                     # finds bugs and bad practices
         args: [--fix]                # fixes the easy ones automatically
-      - id: ruff-format              # formats code in one consistent styles
+      - id: ruff-format              # formats code in one consistent style
