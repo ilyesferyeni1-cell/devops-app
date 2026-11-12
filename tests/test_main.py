@@ -43,3 +43,10 @@ def test_get_missing_item_returns_404():
 def test_create_item_without_price_returns_422():
     response = client.post("/items", json={"name": "tea"})
     assert response.status_code == 422
+
+
+def test_get_existing_item_returns_it():
+    created = client.post("/items", json={"name": "tea", "price": 1.5}).json()
+    response = client.get(f"/items/{created['id']}")
+    assert response.status_code == 200
+    assert response.json() == {"id": 1, "name": "tea", "price": 1.5}
