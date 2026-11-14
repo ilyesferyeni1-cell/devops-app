@@ -5,6 +5,12 @@ services:
     build: .
     ports:
       - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://devops:${DB_PASSWORD}@db:5432/devops
+    # Start only when the database answers, not just when it is switched on
+    depends_on:
+      db:
+        condition: service_healthy
 
   # The database: a ready-made PostgreSQL image from Docker Hub
   db:
@@ -15,6 +21,12 @@ services:
       POSTGRES_DB: devops
     volumes:
       - db-data:/var/lib/postgresql/data
+    # The thermometer: is PostgreSQL accepting connections?
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h 127.0.0.1 -U devops -d devops"]
+      interval: 3s
+      timeout: 3s
+      retries: 10
 
 # Named volumes: storage that survives when containers are deleted
 volumes:
