@@ -1,7 +1,11 @@
 """A small API used to learn DevOps: every later tool will build, test, deploy and watch it."""
 
+import os
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+
+from app.storage import MemoryStorage, PostgresStorage
 
 APP_VERSION = "1.0.0"
 
@@ -21,9 +25,10 @@ class Item(ItemIn):
     id: int
 
 
-# In-memory "database": a simple dict that is lost when the app stops.
-# (A real database arrives with Docker Compose in Step 4.2.)
-items: dict[int, Item] = {}
+# Where items are kept. With DATABASE_URL set (Compose), a real PostgreSQL database.
+# Without it (tests, quick runs), a simple dict in memory.
+DATABASE_URL = os.environ.get("DATABASE_URL")
+storage = PostgresStorage(DATABASE_URL) if DATABASE_URL else MemoryStorage()
 
 
 @app.get("/health")
@@ -35,21 +40,19 @@ def health() -> dict:
 @app.get("/items")
 def list_items() -> list[Item]:
     """Return every item."""
-    return list(items.values())
+    return storage.list_items()
 
 
 @app.post("/items", status_code=201)
 def create_item(item: ItemIn) -> Item:
     """Create an item and give it the next id."""
-    new_id = len(items) + 1
-    created = Item(id=new_id, **item.model_dump())
-    items[new_id] = created
-    return created
+    return storage.create_item(item.name, item.price)
 
 
 @app.get("/items/{item_id}")
 def get_item(item_id: int) -> Item:
     """Return one item, or 404 if it does not exist."""
-    if item_id not in items:
+    found = storage.get_item(item_id)
+    if found is None:
         raise HTTPException(status_code=404, detail="Item not found")
-    return items[item_id]
+    return found

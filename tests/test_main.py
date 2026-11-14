@@ -3,7 +3,7 @@
 import pytest
 from fastapi.testclient import TestClient
 
-from app.main import APP_VERSION, app, items
+from app.main import APP_VERSION, app, storage
 
 client = TestClient(app)
 
@@ -11,9 +11,9 @@ client = TestClient(app)
 @pytest.fixture(autouse=True)
 def empty_database():
     """Give every test a clean, empty database."""
-    items.clear()
+    storage.clear()
     yield
-    items.clear()
+    storage.clear()
 
 
 def test_health_returns_ok_and_version():
