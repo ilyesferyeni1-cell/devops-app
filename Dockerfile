@@ -1,12 +1,19 @@
-# Base tray: an official, small Linux image that already contains Python 3.14
-FROM python:3.14-slim
+# ---- Stage 1: the kitchen (builder) ----
+FROM python:3.14-slim AS builder
 
-# Every next instruction works inside /app (created if it does not exist)
 WORKDIR /app
 
-# First only the ingredients list, then install the ingredients
+# Install the packages into one separate folder, easy to carry away
 COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
+
+# ---- Stage 2: the plate (final image) ----
+FROM python:3.14-slim
+
+WORKDIR /app
+
+# Take only the installed packages from the kitchen
+COPY --from=builder /install /usr/local
 
 # Then the code of the application
 COPY app/ ./app/
