@@ -1,0 +1,17 @@
+# Never send these to the Docker builder
+
+# Secrets
+.env
+
+# Git history and local tools
+.git
+.venv
+.ruff_cache/
+.pytest_cache/
+**/__pycache__/
+
+# Test and coverage outputs
+.coverage
+coverage.xml
+htmlcov/
+report.xml
