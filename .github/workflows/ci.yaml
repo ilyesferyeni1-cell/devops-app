@@ -28,3 +28,10 @@ jobs:
 
       - name: Test with coverage
         run: pytest --cov=app --cov-report=term-missing --cov-fail-under=90 --junitxml=report.xml
+
+      - name: Keep the test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: junit-report
+          path: report.xml
