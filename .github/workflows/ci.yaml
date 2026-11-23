@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Say hello
-        run: exit 1
+        run: echo "Hello from GitHub Actions"
 
       - name: Show where we are
         run: |
