@@ -1,0 +1,23 @@
+# The robot inspector: runs on every pull request and after every merge to main.
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  hello:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Say hello
+        run: echo "Hello from GitHub Actions"
+
+      - name: Show where we are
+        run: |
+          echo "Commit: $GITHUB_SHA"
+          echo "Ref: $GITHUB_REF"
+          uname -a
+
+      - name: Look at the workspace
+        run: ls -la
