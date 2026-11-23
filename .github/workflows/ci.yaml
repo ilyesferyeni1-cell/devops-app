@@ -1,4 +1,4 @@
-# The robot inspector: runs on every pull request and after every merge to main.
+# The robot inspector: lint and test on every pull request and after every merge to main.
 name: CI
 
 on:
@@ -7,17 +7,24 @@ on:
     branches: [main]
 
 jobs:
-  hello:
+  test:
     runs-on: ubuntu-latest
     steps:
-      - name: Say hello
-        run: echo "Hello from GitHub Actions"
+      - name: Get the code
+        uses: actions/checkout@v5
 
-      - name: Show where we are
+      - name: Install Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.14"
+
+      - name: Install dependencies
         run: |
-          echo "Commit: $GITHUB_SHA"
-          echo "Ref: $GITHUB_REF"
-          uname -a
+          pip install -r requirements-dev.txt
+          pip install ruff==0.8.0
 
-      - name: Look at the workspace
-        run: ls -la
+      - name: Lint with ruff
+        run: ruff check .
+
+      - name: Test with coverage
+        run: pytest --cov=app --cov-report=term-missing --cov-fail-under=90 --junitxml=report.xml
