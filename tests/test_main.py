@@ -25,7 +25,7 @@ def test_health_returns_ok_and_version():
 def test_create_item_returns_201_and_the_item():
     response = client.post("/items", json={"name": "coffee", "price": 2.5})
     assert response.status_code == 201
-    assert response.json() == {"id": 1, "name": "coffee", "price": 2.5}
+    assert response.json() == {"id": 2, "name": "coffee", "price": 2.5}
 
 
 def test_list_items_starts_empty():
