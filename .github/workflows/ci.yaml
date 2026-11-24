@@ -1,10 +1,15 @@
-# The robot inspector: lint and test on every pull request and after every merge to main.
+# The robot inspector: lint and test on every pull request,
+# then build and ship the image after every merge to main.
 name: CI
 
 on:
   pull_request:
   push:
     branches: [main]
+
+# By default every job may only read the code.
+permissions:
+  contents: read
 
 jobs:
   test:
@@ -35,3 +40,25 @@ jobs:
         with:
           name: junit-report
           path: report.xml
+
+  image:
+    needs: test
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Get the code
+        uses: actions/checkout@v5
+
+      - name: Build the image
+        run: docker build -t ghcr.io/${{ github.repository }}:${{ github.sha }} .
+
+      - name: Log in to GHCR
+        env:
+          TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: echo "$TOKEN" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Push the image
+        run: docker push ghcr.io/${{ github.repository }}:${{ github.sha }}
