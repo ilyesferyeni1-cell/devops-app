@@ -19,7 +19,7 @@ def empty_database():
 def test_health_returns_ok_and_version():
     response = client.get("/health")
     assert response.status_code == 200
-    assert response.json() == {"status": "broken", "version": APP_VERSION}
+    assert response.json() == {"status": "ok", "version": APP_VERSION}
 
 
 def test_create_item_returns_201_and_the_item():
