@@ -22,6 +22,10 @@ jobs:
         env:
           DEMO_SECRET: ${{ secrets.DEMO_SECRT }}
         run: |
+          if [ -z "$DEMO_SECRET" ]; then
+            echo "Error: DEMO_SECRET is empty or missing"
+            exit 1
+          fi
           echo "The secret has ${#DEMO_SECRET} characters"
           echo "Trying to print it: $DEMO_SECRET"
 
