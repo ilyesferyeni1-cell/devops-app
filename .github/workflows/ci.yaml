@@ -20,7 +20,7 @@ jobs:
 
       - name: Use the secret
         env:
-          DEMO_SECRET: ${{ secrets.DEMO_SECRT }}
+          DEMO_SECRET: ${{ secrets.DEMO_SECRET }}
         run: |
           if [ -z "$DEMO_SECRET" ]; then
             echo "Error: DEMO_SECRET is empty or missing"
