@@ -18,6 +18,13 @@ jobs:
       - name: Get the code
         uses: actions/checkout@v5
 
+      - name: Use the secret
+        env:
+          DEMO_SECRET: ${{ secrets.DEMO_SECRET }}
+        run: |
+          echo "The secret has ${#DEMO_SECRET} characters"
+          echo "Trying to print it: $DEMO_SECRET"
+
       - name: Install Python
         uses: actions/setup-python@v6
         with:
