@@ -20,7 +20,7 @@ jobs:
 
       - name: Use the secret
         env:
-          DEMO_SECRET: ${{ secrets.DEMO_SECRET }}
+          DEMO_SECRET: ${{ secrets.DEMO_SECRT }}
         run: |
           echo "The secret has ${#DEMO_SECRET} characters"
           echo "Trying to print it: $DEMO_SECRET"
