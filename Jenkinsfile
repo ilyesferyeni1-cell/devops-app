@@ -1,5 +1,5 @@
 def setStatus(String state, String desc) {
-    withCredentials([string(credentialsId: 'github-status', variable: 'GH_TOKEN')]) {
+    withCredentials([usernamePassword(credentialsId: 'github-scan', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
         withEnv(["STATE=${state}", "DESC=${desc}"]) {
             sh '''
                 curl -sS -o /dev/null -w "GitHub status HTTP %{http_code}\\n" \
