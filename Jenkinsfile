@@ -1,10 +1,9 @@
 pipeline {
-    agent any
+    agent { label 'linux-build'}
     options {
         disableConcurrentBuilds()
         timeout(time: 15, unit: 'MINUTES')
     }
-
     triggers {
     	pollSCM('H/5 * * * *')
     }
@@ -25,6 +24,11 @@ pipeline {
                     pytest --cov=app --cov-report=term-missing --cov-fail-under=90 --junitxml=report.xml
                 '''
             }
+        }
+        stage('Build image'){
+        	steps {
+        		sh 'docker build -t devops-app:${BUILD_NUMBER} .'
+        	}
         }
     }
     post {
