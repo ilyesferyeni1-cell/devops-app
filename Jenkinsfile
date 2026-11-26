@@ -36,8 +36,19 @@ pipeline {
             steps {
                 sh '''
                     . .venv/bin/activate
-                    pytest --cov=app --cov-report=term-missing --cov-fail-under=90 --junitxml=report.xml
+                    pytest --cov=app --cov-report=term-missing --cov-report=xml --cov-fail-under=90 --junitxml=report.xml
                 '''
+            }
+        }
+        stage('Quality') {
+            steps {
+                withCredentials([string(credentialsId: 'sonar-token', variable: 'SONAR_TOKEN')]) {
+                    sh '''
+                        docker run --rm --volumes-from agent-1 -w "$PWD" \
+                          -e SONAR_TOKEN \
+                          sonarsource/sonar-scanner-cli
+                    '''
+                }
             }
         }
         stage('Build image') {

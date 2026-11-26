@@ -18,3 +18,4 @@ pre-commit install    # activate the commit guards (once per clone)
 ## Run the tests
 pip install -r requirements-dev.txt
 pytest --cov=app --cov-report=term-missing --cov-fail-under=90 --junitxml=report.xml
+# required check test

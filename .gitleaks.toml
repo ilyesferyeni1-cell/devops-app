@@ -1,0 +1,6 @@
+[extend]
+useDefault = true
+
+[allowlist]
+description = "Sonar project and organization keys are public identifiers, not secrets"
+paths = ['''sonar-project\.properties''']
