@@ -56,6 +56,18 @@ pipeline {
                 sh 'docker build -t devops-app:${BUILD_NUMBER} .'
             }
         }
+        stage('Security scan') {
+        	steps {
+        		sh '''
+        			docker run --rm \
+        			--volumes-from agent-1 -w "$PWD" \
+        			-v /var/run/docker.sock:/var/run/docker.sock \
+        			aquasec/trivy:0.69.3 \
+        			image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+        			--ignorefile .trivyignore devops-app:${BUILD_NUMBER}
+        			'''
+        	}
+        }
     }
     post {
         always {
