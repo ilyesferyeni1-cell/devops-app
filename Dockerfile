@@ -9,6 +9,7 @@ RUN pip install --no-cache-dir --prefix=/install -r requirements.txt
 
 # ---- Stage 2: the plate (final image) ----
 FROM python:3.14-slim
+RUN apt-get update && apt-get upgrade -y && rm -rf /var/lib/apt/lists/* && pip install --no-cache-dir --upgrade pip "setuptools>=78.1.1" urllib3 msgpack && pip uninstall -y setuptools
 
 WORKDIR /app
 
