@@ -64,6 +64,7 @@ pipeline {
         			-v /var/run/docker.sock:/var/run/docker.sock \
         			aquasec/trivy:0.69.3 \
         			image --severity HIGH,CRITICAL --ignore-unfixed --exit-code 1 \
+        			--format json --output trivy-report.json \
         			--ignorefile .trivyignore devops-app:${BUILD_NUMBER}
         			'''
         	}
@@ -72,6 +73,7 @@ pipeline {
     post {
         always {
             junit allowEmptyResults: true, testResults: 'report.xml'
+            archiveArtifacts artifacts: 'report.xml, coverage.xml, trivy-report.json, .scannerwork/**', allowEmptyArchive: true, fingerprint: true
         }
         success {
             script { setStatus('success', 'Build, tests and image passed') }
